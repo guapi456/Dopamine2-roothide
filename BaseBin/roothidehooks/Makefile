@@ -6,15 +6,15 @@ ARCHS = arm64 arm64e
 
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = cleanerhooks
+TWEAK_NAME = roothidehooks
 
-cleanerhooks_FILES = $(wildcard *.x) $(wildcard *.c) $(wildcard *.m)
-cleanerhooks_CFLAGS = -Werror -fobjc-arc -I../.include
-cleanerhooks_LDFLAGS = -rpath @loader_path/.jbroot/Library/Frameworks -rpath @loader_path/fallback -L../libjailbreak -ljailbreak
-cleanerhooks_INSTALL_PATH = /basebin
+roothidehooks_FILES = $(wildcard *.x) $(wildcard *.c) $(wildcard *.m)
+roothidehooks_CFLAGS = -Werror -fobjc-arc -I../.include
+roothidehooks_LDFLAGS = -rpath @loader_path/.jbroot/Library/Frameworks -rpath @loader_path/fallback -L../libjailbreak -ljailbreak
+roothidehooks_INSTALL_PATH = /basebin
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
-after-cleanerhooks-all::
-	install_name_tool -change @loader_path/.jbroot/usr/lib/libsubstrate.dylib @rpath/CydiaSubstrate.framework/CydiaSubstrate $(THEOS_OBJ_DIR)/cleanerhooks.dylib
-	ldid -S $(THEOS_OBJ_DIR)/cleanerhooks.dylib
+after-roothidehooks-all::
+	install_name_tool -change @loader_path/.jbroot/usr/lib/libsubstrate.dylib @rpath/CydiaSubstrate.framework/CydiaSubstrate $(THEOS_OBJ_DIR)/roothidehooks.dylib
+	ldid -S $(THEOS_OBJ_DIR)/roothidehooks.dylib

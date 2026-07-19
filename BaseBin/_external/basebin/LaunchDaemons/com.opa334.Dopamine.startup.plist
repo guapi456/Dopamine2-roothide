@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.departure.initializer</string>
+	<string>com.opa334.Dopamine.startup</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>@JBROOT@/basebin/jbctl</string>

@@ -1,5 +1,5 @@
-Package: libroot-departure
-Name: libroot (Departure)
+Package: libroot-dopamine
+Name: libroot (Dopamine)
 Author: opa334
 Maintainer: opa334
 Architecture: iphoneos-arm64

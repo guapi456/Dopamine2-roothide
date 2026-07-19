@@ -6,7 +6,7 @@
 		<key>Display Name</key>
 		<string>商店</string>
 		<key>Key</key>
-		<string>com.departure.shopfront</string>
+		<string>org.coolstar.SileoStore</string>
 		<key>Icon</key>
 		<string>Sileo</string>
 		<key>Package</key>

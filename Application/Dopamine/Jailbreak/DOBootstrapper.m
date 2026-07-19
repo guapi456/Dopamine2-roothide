@@ -22,9 +22,9 @@
 #define BASEBIN_LINK_BUNDLED_VERSION @"1.0.0"
 
 static NSDictionary *gBundledPackages = @{
-    @"libkrw0-departure" : LIBKRW_DOPAMINE_BUNDLED_VERSION,
-    @"libroot-departure" : LIBROOT_DOPAMINE_BUNDLED_VERSION,
-    @"departure-basebin-link" : BASEBIN_LINK_BUNDLED_VERSION,
+    @"libkrw0-dopamine" : LIBKRW_DOPAMINE_BUNDLED_VERSION,
+    @"libroot-dopamine" : LIBROOT_DOPAMINE_BUNDLED_VERSION,
+    @"dopamine-basebin-link" : BASEBIN_LINK_BUNDLED_VERSION,
 };
 
 struct hfs_mount_args {
@@ -660,9 +660,9 @@ typedef NS_ENUM(NSInteger, JBErrorCode) {
         if (error) return error;
     }
     
-    BOOL shouldInstallLibroot = [self shouldInstallPackage:@"libroot-departure"];
-    BOOL shouldInstallLibkrw = [self shouldInstallPackage:@"libkrw0-departure"];
-    BOOL shouldInstallBasebinLink = [self shouldInstallPackage:@"departure-basebin-link"];
+    BOOL shouldInstallLibroot = [self shouldInstallPackage:@"libroot-dopamine"];
+    BOOL shouldInstallLibkrw = [self shouldInstallPackage:@"libkrw0-dopamine"];
+    BOOL shouldInstallBasebinLink = [self shouldInstallPackage:@"dopamine-basebin-link"];
     
     if (shouldInstallLibroot || shouldInstallLibkrw || shouldInstallBasebinLink) {
         [[DOUIManager sharedInstance] sendLog:@"Updating Bundled Packages" debug:NO];
@@ -1293,8 +1293,8 @@ int getCFMajorVersion(void)
 
         //Remove the shits triggered by uicache before first jailbreak is fully activated.
         [NSFileManager.defaultManager removeItemAtPath:@"/var/mobile/Library/SplashBoard/Snapshots/xyz.willy.Zebra" error:nil];
-        [NSFileManager.defaultManager removeItemAtPath:@"/var/mobile/Library/SplashBoard/Snapshots/com.departure.cleaner" error:nil];
-        [NSFileManager.defaultManager removeItemAtPath:@"/var/mobile/Library/SplashBoard/Snapshots/com.departure.shopfront" error:nil];
+        [NSFileManager.defaultManager removeItemAtPath:@"/var/mobile/Library/SplashBoard/Snapshots/com.roothide.manager" error:nil];
+        [NSFileManager.defaultManager removeItemAtPath:@"/var/mobile/Library/SplashBoard/Snapshots/org.coolstar.SileoStore" error:nil];
     }
     else
     {
@@ -1315,8 +1315,8 @@ int getCFMajorVersion(void)
         }
     }
     
-    BOOL shouldInstallLibkrw = [self shouldInstallPackage:@"libkrw0-departure"];
-    BOOL shouldInstallBasebinLink = [self shouldInstallPackage:@"departure-basebin-link"];
+    BOOL shouldInstallLibkrw = [self shouldInstallPackage:@"libkrw0-dopamine"];
+    BOOL shouldInstallBasebinLink = [self shouldInstallPackage:@"dopamine-basebin-link"];
     
     if (shouldInstallLibkrw || shouldInstallBasebinLink) {
         [[DOUIManager sharedInstance] sendLog:@"Updating Bundled Packages" debug:NO];

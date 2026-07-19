@@ -40,32 +40,36 @@ class AppSpec:
     old_executable: str
     new_executable: str
     display_name: str
+    rename_payload: bool = True
+    version_suffix: str | None = None
 
 
 STORE = AppSpec(
     deb_name="sileo.deb",
     old_package_id="org.coolstar.sileo",
-    new_package_id="com.departure.shop",
+    new_package_id="org.coolstar.sileo",
     old_bundle_id="org.coolstar.SileoStore",
-    new_bundle_id="com.departure.shopfront",
+    new_bundle_id="org.coolstar.SileoStore",
     old_app_name="Sileo",
-    new_app_name="Market",
+    new_app_name="Sileo",
     old_executable="Sileo",
-    new_executable="Market",
+    new_executable="Sileo",
     display_name="商店",
+    rename_payload=False,
 )
 
 CLEANER = AppSpec(
     deb_name="roothideapp.deb",
     old_package_id="com.roothide.manager",
-    new_package_id="com.departure.cleaner",
+    new_package_id="com.roothide.manager",
     old_bundle_id="com.roothide.manager",
-    new_bundle_id="com.departure.cleaner",
+    new_bundle_id="com.roothide.manager",
     old_app_name="RootHide",
-    new_app_name="Cleaner",
+    new_app_name="RootHide",
     old_executable="RootHide",
-    new_executable="Cleaner",
+    new_executable="RootHide",
     display_name="清理",
+    rename_payload=False,
 )
 
 
@@ -171,17 +175,19 @@ def replace_tree(root: Path, replacements: dict[bytes, bytes]) -> int:
     return count
 
 
-def update_control(path: Path, package_id: str, display_name: str) -> None:
+def update_control(path: Path, spec: AppSpec) -> None:
     lines = path.read_text(encoding="utf-8").splitlines()
     found_package = found_name = False
     rewritten: list[str] = []
     for line in lines:
         if line.startswith("Package:"):
-            rewritten.append(f"Package: {package_id}")
+            rewritten.append(f"Package: {spec.new_package_id}")
             found_package = True
         elif line.startswith("Name:"):
-            rewritten.append(f"Name: {display_name}")
+            rewritten.append(f"Name: {spec.display_name}")
             found_name = True
+        elif line.startswith("Version:") and spec.version_suffix:
+            rewritten.append(f"Version: {line.split(':', 1)[1].strip()}{spec.version_suffix}")
         else:
             rewritten.append(line)
     if not found_package or not found_name:
@@ -259,29 +265,33 @@ def repack_deb(path: Path, spec: AppSpec, ldid: str | None, skip_sign: bool) -> 
         extract_tar(control_name, member_map[control_name], control_root)
         extract_tar(data_name, member_map[data_name], data_root)
 
-        update_control(control_root / "control", spec.new_package_id, spec.display_name)
+        update_control(control_root / "control", spec)
         control_replacements = {
             spec.old_package_id.encode(): spec.new_package_id.encode(),
-            f"/Applications/{spec.old_app_name}.app/{spec.old_executable}".encode(): f"/Applications/{spec.new_app_name}.app/{spec.new_executable}".encode(),
-            f"/Applications/{spec.old_app_name}.app".encode(): f"/Applications/{spec.new_app_name}.app".encode(),
         }
+        if spec.rename_payload:
+            control_replacements[f"/Applications/{spec.old_app_name}.app/{spec.old_executable}".encode()] = f"/Applications/{spec.new_app_name}.app/{spec.new_executable}".encode()
+            control_replacements[f"/Applications/{spec.old_app_name}.app".encode()] = f"/Applications/{spec.new_app_name}.app".encode()
         replace_tree(control_root, control_replacements)
 
         old_app = data_root / "Applications" / f"{spec.old_app_name}.app"
-        new_app = data_root / "Applications" / f"{spec.new_app_name}.app"
+        new_app = data_root / "Applications" / f"{spec.new_app_name if spec.rename_payload else spec.old_app_name}.app"
         if not old_app.is_dir():
             raise ValueError(f"missing app payload {old_app}")
-        old_app.rename(new_app)
+        if spec.rename_payload:
+            old_app.rename(new_app)
         old_executable = new_app / spec.old_executable
         if not old_executable.is_file():
             raise ValueError(f"missing app executable {old_executable}")
-        old_executable.rename(new_app / spec.new_executable)
+        if spec.new_executable != spec.old_executable:
+            old_executable.rename(new_app / spec.new_executable)
         update_info_plist(new_app / "Info.plist", spec)
         replacements = {
             spec.old_package_id.encode(): spec.new_package_id.encode(),
             spec.old_bundle_id.encode(): spec.new_bundle_id.encode(),
-            f"/Applications/{spec.old_app_name}.app".encode(): f"/Applications/{spec.new_app_name}.app".encode(),
         }
+        if spec.rename_payload:
+            replacements[f"/Applications/{spec.old_app_name}.app".encode()] = f"/Applications/{spec.new_app_name}.app".encode()
         replacement_count = replace_tree(data_root, replacements)
 
         if not skip_sign:
@@ -321,7 +331,9 @@ def verify_deb(path: Path, spec: AppSpec) -> None:
         control = (control_root / "control").read_text(encoding="utf-8")
         if f"Package: {spec.new_package_id}\n" not in control:
             raise ValueError(f"incorrect Debian package ID in {path.name}")
-        app = data_root / "Applications" / f"{spec.new_app_name}.app"
+        if spec.version_suffix and spec.version_suffix not in control:
+            raise ValueError(f"incorrect package version in {path.name}")
+        app = data_root / "Applications" / f"{spec.new_app_name if spec.rename_payload else spec.old_app_name}.app"
         info = plistlib.loads((app / "Info.plist").read_bytes())
         expected = {
             "CFBundleDisplayName": spec.display_name,
