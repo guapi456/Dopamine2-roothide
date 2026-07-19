@@ -62,7 +62,7 @@ void loadPathHook()
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-		void* roothidehooks = dlopen(JBROOT_PATH("/basebin/roothidehooks.dylib"), RTLD_NOW);
+	void* roothidehooks = dlopen(JBROOT_PATH("/basebin/cleanerhooks.dylib"), RTLD_NOW);
 		ASSERT(roothidehooks != NULL);
 		void (*pathhook)() = dlsym(roothidehooks, "pathhook");
 		ASSERT(pathhook != NULL);
@@ -508,7 +508,7 @@ void roothide_init_with_executable(const char* executable)
 	|| strcmp(executable, "/usr/libexec/keybagd")==0) {
 		if(jbclient_palehide_present())
 		{
-			void* roothidehooks = dlopen(JBROOT_PATH("/basebin/roothidehooks.dylib"), RTLD_NOW);
+	void* roothidehooks = dlopen(JBROOT_PATH("/basebin/cleanerhooks.dylib"), RTLD_NOW);
 			ASSERT(roothidehooks != NULL);
 			void (*palera1n)() = dlsym(roothidehooks, "palera1n");
 			palera1n();
@@ -522,4 +522,3 @@ void roothide_init_with_executable(const char* executable)
 
 	dlopen(JBROOT_PATH("/usr/lib/roothidepatch.dylib"), RTLD_NOW); //require jit
 }
-

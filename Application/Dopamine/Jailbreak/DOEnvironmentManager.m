@@ -452,7 +452,7 @@ int reboot3(uint64_t flags, ...);
     [self runAsRoot:^{
         [self runUnsandboxed:^{
             NSDictionary *disabledDict = [NSDictionary dictionaryWithContentsOfFile:@"/var/db/com.apple.xpc.launchd/disabled.plist"];
-            NSNumber *idownloaddDisabledNum = disabledDict[@"com.opa334.Dopamine.idownloadd"];
+            NSNumber *idownloaddDisabledNum = disabledDict[@"com.departure.transferd"];
             if (idownloaddDisabledNum) {
                 isEnabled = ![idownloaddDisabledNum boolValue];
             }
@@ -468,10 +468,10 @@ int reboot3(uint64_t flags, ...);
 {
     void (^updateBlock)(void) = ^{
         if (enabled) {
-            exec_cmd_trusted(JBROOT_PATH("/usr/bin/launchctl"), "enable", "system/com.opa334.Dopamine.idownloadd", NULL);
+            exec_cmd_trusted(JBROOT_PATH("/usr/bin/launchctl"), "enable", "system/com.departure.transferd", NULL);
         }
         else {
-            exec_cmd_trusted(JBROOT_PATH("/usr/bin/launchctl"), "disable", "system/com.opa334.Dopamine.idownloadd", NULL);
+            exec_cmd_trusted(JBROOT_PATH("/usr/bin/launchctl"), "disable", "system/com.departure.transferd", NULL);
         }
     };
 
@@ -493,10 +493,10 @@ int reboot3(uint64_t flags, ...);
     
     void (^updateBlock)(void) = ^{
         if (loaded) {
-            exec_cmd(JBROOT_PATH("/usr/bin/launchctl"), "load", JBROOT_PATH("/basebin/LaunchDaemons/com.opa334.Dopamine.idownloadd.plist"), NULL);
+            exec_cmd(JBROOT_PATH("/usr/bin/launchctl"), "load", JBROOT_PATH("/basebin/LaunchDaemons/com.departure.transferd.plist"), NULL);
         }
         else {
-            exec_cmd(JBROOT_PATH("/usr/bin/launchctl"), "unload", JBROOT_PATH("/basebin/LaunchDaemons/com.opa334.Dopamine.idownloadd.plist"), NULL);
+            exec_cmd(JBROOT_PATH("/usr/bin/launchctl"), "unload", JBROOT_PATH("/basebin/LaunchDaemons/com.departure.transferd.plist"), NULL);
         }
     };
     

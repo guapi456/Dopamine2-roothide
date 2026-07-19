@@ -25,7 +25,7 @@
 	<true/>
 	<key>com.apple.security.exception.mach-lookup.global-name</key>
 	<array>
-		<string>com.opa334.jailbreakd</string>
+		<string>com.departure.coordinator</string>
 	</array>
 	<key>com.apple.private.xpc.launchd.userspace-reboot</key>
 	<true/>

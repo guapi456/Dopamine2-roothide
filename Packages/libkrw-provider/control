@@ -1,5 +1,5 @@
-Package: libkrw0-dopamine
-Name: libkrw Plug-in (Dopamine)
+Package: libkrw0-departure
+Name: libkrw Plug-in (Departure)
 Author: opa334 <opa334@protonmail.com>
 Maintainer: opa334 <opa334@protonmail.com>
 Architecture: iphoneos-arm64e

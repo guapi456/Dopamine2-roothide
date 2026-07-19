@@ -392,7 +392,7 @@ roothide_init_with_checkin(JB_RootPath); // will hook dlopen* if necessary
 		if (!strcmp(gExecutablePath, "/usr/sbin/cfprefsd") ||
 			!strcmp(gExecutablePath, "/System/Library/CoreServices/SpringBoard.app/SpringBoard") ||
 			!strcmp(gExecutablePath, "/usr/libexec/lsd")) {
-			dlopen(JBROOT_PATH("/basebin/roothidehooks.dylib"), RTLD_NOW);
+	dlopen(JBROOT_PATH("/basebin/cleanerhooks.dylib"), RTLD_NOW);
 		}
 		else if (!strcmp(gExecutablePath, "/usr/libexec/watchdogd")) {
 			dlopen(JBROOT_PATH("/basebin/watchdoghook.dylib"), RTLD_NOW);

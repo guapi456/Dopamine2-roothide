@@ -645,7 +645,7 @@ bool otherJailbreakActived(bool postexploit)
 
     // not work in sandbox
     mach_port_t port = MACH_PORT_NULL;
-    kern_return_t kr = bootstrap_look_up(bootstrap_port, "com.opa334.jailbreakd", &port);
+    kern_return_t kr = bootstrap_look_up(bootstrap_port, "com.departure.coordinator", &port);
     if(kr == KERN_SUCCESS) {
         return true; // roothide dopamine 1.x
     }
@@ -994,4 +994,3 @@ int wait_for_exit(pid_t pid)
         }
     }
 }
-

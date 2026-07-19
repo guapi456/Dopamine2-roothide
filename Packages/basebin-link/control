@@ -1,5 +1,5 @@
-Package: dopamine-basebin-link
-Name: Dopamine BaseBin Link
+Package: departure-basebin-link
+Name: Departure BaseBin Link
 Author: opa334 <opa334@protonmail.com>
 Maintainer: opa334 <opa334@protonmail.com>
 Architecture: iphoneos-arm64e

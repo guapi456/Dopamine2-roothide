@@ -68,7 +68,7 @@ watchdoghook: .build .include libjailbreak
 
 roothidehooks: .build .include libjailbreak
 	$(MAKE) -C roothidehooks
-	@cp roothidehooks/.theos/obj/roothidehooks.dylib .build
+	@cp roothidehooks/.theos/obj/cleanerhooks.dylib .build
 
 bootstrapper: .build .include libjailbreak
 	$(MAKE) -C bootstrapper
