@@ -145,7 +145,9 @@ def extract_tar(member_name: str, body: bytes, destination: Path) -> None:
 def build_tar(source: Path) -> bytes:
     result = io.BytesIO()
     entries = sorted(source.rglob("*"), key=lambda item: (len(item.relative_to(source).parts), str(item)))
-    with tarfile.open(fileobj=result, mode="w") as archive:
+    # Procursus dpkg-deb accepts GNU/ustar headers, but rejects Python's
+    # default POSIX.1-2001 PAX extended headers.
+    with tarfile.open(fileobj=result, mode="w", format=tarfile.GNU_FORMAT) as archive:
         for entry in entries:
             archive.add(entry, arcname=f"./{entry.relative_to(source).as_posix()}", recursive=False)
     return result.getvalue()
@@ -311,6 +313,10 @@ def verify_deb(path: Path, spec: AppSpec) -> None:
         data_root.mkdir()
         extract_tar(control_name, members[control_name], control_root)
         extract_tar(data_name, members[data_name], data_root)
+        for member_name in (control_name, data_name):
+            with tarfile.open(fileobj=io.BytesIO(decompress_tar(member_name, members[member_name])), mode="r:") as archive:
+                if any(member.pax_headers for member in archive.getmembers()):
+                    raise ValueError(f"PAX tar headers are not supported in {path.name}:{member_name}")
         control = (control_root / "control").read_text(encoding="utf-8")
         if f"Package: {spec.new_package_id}\n" not in control:
             raise ValueError(f"incorrect Debian package ID in {path.name}")
