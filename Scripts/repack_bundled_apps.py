@@ -262,6 +262,7 @@ def repack_deb(path: Path, spec: AppSpec, ldid: str | None, skip_sign: bool) -> 
         update_control(control_root / "control", spec.new_package_id, spec.display_name)
         control_replacements = {
             spec.old_package_id.encode(): spec.new_package_id.encode(),
+            f"/Applications/{spec.old_app_name}.app/{spec.old_executable}".encode(): f"/Applications/{spec.new_app_name}.app/{spec.new_executable}".encode(),
             f"/Applications/{spec.old_app_name}.app".encode(): f"/Applications/{spec.new_app_name}.app".encode(),
         }
         replace_tree(control_root, control_replacements)
