@@ -2365,9 +2365,10 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "出发";
 				INFOPLIST_KEY_CFBundleName = "出发";
 				PRODUCT_BUNDLE_IDENTIFIER = com.departure.launcher;
-				PRODUCT_NAME = Dop;
+				PRODUCT_NAME = "出发";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_NAME = Dop.app;
 			};
 			name = Debug;
 		};
@@ -2405,9 +2406,10 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "出发";
 				INFOPLIST_KEY_CFBundleName = "出发";
 				PRODUCT_BUNDLE_IDENTIFIER = com.departure.launcher;
-				PRODUCT_NAME = Dop;
+				PRODUCT_NAME = "出发";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_NAME = Dop.app;
 			};
 			name = Release;
 		};
