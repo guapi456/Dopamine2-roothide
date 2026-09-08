@@ -527,7 +527,7 @@
 		8C609C9D2C19AEE70023DD12 /* NSString+Version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Version.h"; sourceTree = "<group>"; };
 		8C6599DA2C555A60000FF57F /* DOPSJetsamListItemsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DOPSJetsamListItemsController.m; sourceTree = "<group>"; };
 		8C6599DC2C555A71000FF57F /* DOPSJetsamListItemsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOPSJetsamListItemsController.h; sourceTree = "<group>"; };
-		8C7198152ABF0E82003C6658 /* Dopamine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dopamine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C7198152ABF0E82003C6658 /* Dop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C7198182ABF0E82003C6658 /* DOAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOAppDelegate.h; sourceTree = "<group>"; };
 		8C7198192ABF0E82003C6658 /* DOAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DOAppDelegate.m; sourceTree = "<group>"; };
 		8C71981B2ABF0E82003C6658 /* DOSceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOSceneDelegate.h; sourceTree = "<group>"; };
@@ -1063,7 +1063,7 @@
 		8C7198162ABF0E82003C6658 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8C7198152ABF0E82003C6658 /* Dopamine.app */,
+				8C7198152ABF0E82003C6658 /* Dop.app */,
 				8CDD07A72B4F619000A32B61 /* kfd.framework */,
 				8C2B1FDF2B532374009BA166 /* dmaFail.framework */,
 				8C05B0032B63152B001A7CF3 /* badRecovery.framework */,
@@ -1396,7 +1396,7 @@
 				8C46D7242B588973002899DB /* libzstd */,
 			);
 			productName = Dopamine;
-			productReference = 8C7198152ABF0E82003C6658 /* Dopamine.app */;
+			productReference = 8C7198152ABF0E82003C6658 /* Dop.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8CDD07A62B4F619000A32B61 /* kfd */ = {
@@ -2361,8 +2361,11 @@
 					"$(PROJECT_DIR)/Dopamine/Resources",
 				);
 				MARKETING_VERSION = 2.4.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.opa334.Dopamine-roothide;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				EXECUTABLE_NAME = Dopamine;
+				INFOPLIST_KEY_CFBundleDisplayName = "出发";
+				INFOPLIST_KEY_CFBundleName = "出发";
+				PRODUCT_BUNDLE_IDENTIFIER = com.departure.launcher;
+				PRODUCT_NAME = Dop;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2398,8 +2401,11 @@
 					"$(PROJECT_DIR)/Dopamine/Resources",
 				);
 				MARKETING_VERSION = 2.4.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.opa334.Dopamine-roothide;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				EXECUTABLE_NAME = Dopamine;
+				INFOPLIST_KEY_CFBundleDisplayName = "出发";
+				INFOPLIST_KEY_CFBundleName = "出发";
+				PRODUCT_BUNDLE_IDENTIFIER = com.departure.launcher;
+				PRODUCT_NAME = Dop;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

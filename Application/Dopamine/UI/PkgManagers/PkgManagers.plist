@@ -4,9 +4,9 @@
 <array>
 	<dict>
 		<key>Display Name</key>
-		<string>Sileo</string>
+		<string>商店</string>
 		<key>Key</key>
-		<string>org.coolstar.SileoStore</string>
+		<string>com.departure.marketapp</string>
 		<key>Icon</key>
 		<string>Sileo</string>
 		<key>Package</key>

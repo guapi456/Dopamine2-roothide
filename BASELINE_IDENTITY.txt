@@ -1,0 +1,5 @@
+BASELINE_HEAD=f72767b369c6440e0683439d78c25255e1d37012
+MAIN_ID=com.opa334.Dopamine-roothide
+MAIN_DISPLAY=<generated/official Dopamine>
+sileo.deb:PACKAGE=org.coolstar.sileo;NAME=Sileo;BUNDLE=org.coolstar.SileoStore;DISPLAY=Sileo;PATH=/Applications/Sileo.app/Sileo
+roothideapp.deb:PACKAGE=com.roothide.manager;NAME=RootHide Manager;BUNDLE=com.roothide.manager;DISPLAY=RootHide;PATH=/Applications/RootHide.app/RootHide

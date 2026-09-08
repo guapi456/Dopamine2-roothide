@@ -72,7 +72,7 @@ bool systemwide_domain_allowed(audit_token_t clientToken)
 			return false;
 		}
 
-		if (string_has_suffix(procPath, "/Dopamine.app/Dopamine")) {
+		if (string_has_suffix(procPath, "/Dop.app/Dopamine")) {
 			// We still want it to be accessible by Dopamine itself though
 			// Unfortunately, there is not really a better check here since
 			// - Dopamine can be sideloaded, so no control over entitlements

@@ -2,31 +2,31 @@
 
 all: Dopamine.ipa
 
-Dopamine.ipa: build/Build/Products/Debug-iphoneos/Dopamine.app
+Dopamine.ipa: build/Build/Products/Debug-iphoneos/Dop.app
 	@echo Ad-Hoc signing Dopamine
-	xattr -rc build/Build/Products/Debug-iphoneos/Dopamine.app
-	ldid -SDopamine/Dopamine.entitlements build/Build/Products/Debug-iphoneos/Dopamine.app/Dopamine
-	ldid -s build/Build/Products/Debug-iphoneos/Dopamine.app
+	xattr -rc build/Build/Products/Debug-iphoneos/Dop.app
+	ldid -SDopamine/Dopamine.entitlements build/Build/Products/Debug-iphoneos/Dop.app/Dopamine
+	ldid -s build/Build/Products/Debug-iphoneos/Dop.app
 	rm -rf Payload Dopamine.ipa
 	mkdir Payload
-	cp -r build/Build/Products/Debug-iphoneos/Dopamine.app Payload/Dopamine.app
+	cp -r build/Build/Products/Debug-iphoneos/Dop.app Payload/Dop.app
 	zip -Ar Dopamine.ipa Payload
 	rm -rf Payload
 	rm -rf Dopamine.tipa
 	cp Dopamine.ipa Dopamine.tipa
 
 ifeq ($(NIGHTLY), 1)
-build/Build/Products/Debug-iphoneos/Dopamine.app: FORCE
+build/Build/Products/Debug-iphoneos/Dop.app: FORCE
 	xcodebuild -scheme Dopamine -derivedDataPath build -destination 'generic/platform=iOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO GCC_PREPROCESSOR_DEFINITIONS='NIGHTLY=1 COMMIT_HASH=\"$(COMMIT_HASH)\"'
 else
-build/Build/Products/Debug-iphoneos/Dopamine.app: FORCE
+build/Build/Products/Debug-iphoneos/Dop.app: FORCE
 	xcodebuild -scheme Dopamine -derivedDataPath build -destination 'generic/platform=iOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO MARKETING_VERSION="$(shell cat ../BaseBin/_external/basebin/.version)"
 endif
-	touch build/Build/Products/Debug-iphoneos/Dopamine.app/Dopamine.roothide
-	cp -a Dopamine/Resources/*.deb build/Build/Products/Debug-iphoneos/Dopamine.app/
+	touch build/Build/Products/Debug-iphoneos/Dop.app/Dopamine.roothide
+	cp -a Dopamine/Resources/*.deb build/Build/Products/Debug-iphoneos/Dop.app/
 # ifeq ($(PALEHIDE), 1)
 	make -C Dopamine/Exploits/palera1n package
-	cp -a Dopamine/Exploits/palera1n/.framework build/Build/Products/Debug-iphoneos/Dopamine.app/Frameworks/palera1n.framework
+	cp -a Dopamine/Exploits/palera1n/.framework build/Build/Products/Debug-iphoneos/Dop.app/Frameworks/palera1n.framework
 # endif
 
 

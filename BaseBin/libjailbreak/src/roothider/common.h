@@ -92,9 +92,7 @@ bool is_apple_internal_identifier(const char* identifier);
 #define SENSITIVE_APP_IDENTIFIERS @[\
     @"com.icraze.gtatracker",\
     @"com.Alfie.TrollInstallerX",\
-    @"com.opa334.Dopamine",\
-    @"com.opa334.Dopamine.roothide",\
-    @"com.opa334.Dopamine-roothide",\
+    @"com.departure.launcher",\
 ]
 
 @class NSSet;
