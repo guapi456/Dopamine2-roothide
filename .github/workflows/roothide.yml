@@ -1,4 +1,4 @@
-name: "构建 出发 主App兼容包"
+name: "构建 出发 兼容显示名包"
 
 on:
   # schedule:
@@ -30,6 +30,11 @@ jobs:
         uses: dhinakg/procursus-action@main
         with:
           packages: ldid findutils sed coreutils make
+
+      - name: Relabel Sileo and RootHide Manager
+        run: |
+          set -euxo pipefail
+          python3 Scripts/relabel_bundled_apps.py --ldid "$(command -v ldid)"
 
       - name: Install THEOS
         run: |
@@ -84,10 +89,10 @@ jobs:
           mv ./Application/Dopamine.tipa "./Application/出发-上游26-${VERSION}.tipa"
           echo "version=${VERSION}" >> $GITHUB_ENV
 
-      - name: Verify main-only customization
+      - name: Verify compatibility customization
         run: |
           set -euxo pipefail
-          python3 Scripts/verify_mainonly_build.py "./Application/出发-上游26-${version}.tipa"
+          python3 Scripts/verify_compat_build.py "./Application/出发-上游26-${version}.tipa"
 
       - name: Upload Artifact
         id: dopamine-latest-upload

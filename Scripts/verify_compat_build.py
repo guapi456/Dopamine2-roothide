@@ -1,28 +1,22 @@
 #!/usr/bin/env python3
-"""Verify the final TIPA changes only the main application identity."""
+"""Verify main identity plus display-only Sileo/RootHide relabeling."""
 
 from __future__ import annotations
 
-import hashlib
 import plistlib
 import sys
+import tempfile
 import zipfile
 from pathlib import Path
 
+import relabel_bundled_apps as relabel
+
 MAIN_ID = "com.departure.launcher"
-OFFICIAL_DEB_SHA256 = {
-    "sileo.deb": "E85AB12F8D98DA9A5350293647266B898282B0D766DF2397526AB253D84EEDE3",
-    "roothideapp.deb": "B8F075E1844709845962900B22FE71136A66369A2C35BB1201087F2FD9476B7D",
-}
-
-
-def sha256(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest().upper()
 
 
 def main() -> None:
     if len(sys.argv) != 2:
-        raise SystemExit("usage: verify_mainonly_build.py <tipa>")
+        raise SystemExit("usage: verify_compat_build.py <tipa>")
     tipa = Path(sys.argv[1]).resolve()
     if not tipa.is_file():
         raise ValueError(f"missing TIPA: {tipa}")
@@ -52,19 +46,21 @@ def main() -> None:
         if actual != expected:
             raise ValueError(f"incorrect main app metadata: {actual!r}")
 
-        for filename, expected_hash in OFFICIAL_DEB_SHA256.items():
-            path = f"Payload/Dopamine.app/{filename}"
-            actual_hash = sha256(archive.read(path))
-            if actual_hash != expected_hash:
-                raise ValueError(
-                    f"{filename} differs from upstream: {actual_hash} != {expected_hash}"
-                )
-            print(f"{filename}=OFFICIAL sha256={actual_hash}")
+        with tempfile.TemporaryDirectory(prefix="departure-compat-verify-") as temp_dir:
+            temp = Path(temp_dir)
+            for filename, spec in (
+                ("sileo.deb", relabel.STORE),
+                ("roothideapp.deb", relabel.CLEANER),
+            ):
+                path = f"Payload/Dopamine.app/{filename}"
+                extracted = temp / filename
+                extracted.write_bytes(archive.read(path))
+                relabel.verify_deb(extracted, spec)
 
     print(f"TIPA verification passed: {tipa}")
     print("main=com.departure.launcher display=出发 app=Dopamine.app executable=Dopamine")
-    print("store=OFFICIAL org.coolstar.SileoStore app=Sileo.app package=org.coolstar.sileo")
-    print("manager=OFFICIAL com.roothide.manager app=RootHide.app package=com.roothide.manager")
+    print("store=org.coolstar.SileoStore display=商店 app=Sileo.app executable=Sileo package=org.coolstar.sileo")
+    print("manager=com.roothide.manager display=清理 app=RootHide.app executable=RootHide package=com.roothide.manager")
 
 
 if __name__ == "__main__":
