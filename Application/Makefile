@@ -4,6 +4,8 @@ all: Dopamine.ipa
 
 Dopamine.ipa: build/Build/Products/Debug-iphoneos/Dopamine.app
 	@echo Ad-Hoc signing Dopamine
+	plutil -replace CFBundleDisplayName -string "出发" build/Build/Products/Debug-iphoneos/Dopamine.app/Info.plist
+	plutil -replace CFBundleName -string "出发" build/Build/Products/Debug-iphoneos/Dopamine.app/Info.plist
 	xattr -rc build/Build/Products/Debug-iphoneos/Dopamine.app
 	ldid -SDopamine/Dopamine.entitlements build/Build/Products/Debug-iphoneos/Dopamine.app/Dopamine
 	ldid -s build/Build/Products/Debug-iphoneos/Dopamine.app
