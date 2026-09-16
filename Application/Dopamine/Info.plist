@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>出发</string>
 	<key>CFBundleName</key>
-	<string>出发</string>
+	<string>Dopamine</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -2362,7 +2362,7 @@
 				);
 				MARKETING_VERSION = 2.4.9;
 				INFOPLIST_KEY_CFBundleDisplayName = "出发";
-				INFOPLIST_KEY_CFBundleName = "出发";
+				INFOPLIST_KEY_CFBundleName = Dopamine;
 				PRODUCT_BUNDLE_IDENTIFIER = com.departure.launcher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2401,7 +2401,7 @@
 				);
 				MARKETING_VERSION = 2.4.9;
 				INFOPLIST_KEY_CFBundleDisplayName = "出发";
-				INFOPLIST_KEY_CFBundleName = "出发";
+				INFOPLIST_KEY_CFBundleName = Dopamine;
 				PRODUCT_BUNDLE_IDENTIFIER = com.departure.launcher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

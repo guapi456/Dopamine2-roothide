@@ -59,7 +59,7 @@ STORE = DebSpec(
     app_name="Sileo",
     executable="Sileo",
     new_display_name="商店",
-    new_bundle_name="商店",
+    new_bundle_name="Sileo",
 )
 
 CLEANER = DebSpec(
@@ -68,7 +68,7 @@ CLEANER = DebSpec(
     app_name="RootHide",
     executable="RootHide",
     new_display_name="清理",
-    new_bundle_name="清理",
+    new_bundle_name="RootHide",
     clean_rules=True,
 )
 

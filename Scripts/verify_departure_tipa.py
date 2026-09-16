@@ -32,7 +32,7 @@ def check_main_app(archive: zipfile.ZipFile, names: set[str]) -> None:
     expected = {
         "CFBundleIdentifier": MAIN_BUNDLE_ID,
         "CFBundleDisplayName": MAIN_DISPLAY,
-        "CFBundleName": MAIN_DISPLAY,
+        "CFBundleName": "Dopamine",
         "CFBundleExecutable": "Dopamine",
     }
     actual = {key: info.get(key) for key in expected}
