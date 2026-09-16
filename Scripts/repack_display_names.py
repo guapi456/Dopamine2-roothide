@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import gzip
+import hashlib
 import io
 import lzma
 import plistlib
@@ -25,14 +26,9 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCES = ROOT / "Application" / "Dopamine" / "Resources"
 
-MAIN_BUNDLE_ID = "com.departure.launcher"
-
-# Longest first: the shorter official IDs are prefixes of the longer one.
-STALE_MAIN_BUNDLE_IDS = (
-    "com.opa334.Dopamine.roothide",
-    "com.opa334.Dopamine-roothide",
-    "com.opa334.Dopamine",
-)
+# RootHide asserts the CRC of this file at launch. Display-name customization
+# must preserve it byte-for-byte, including official main-app identifiers.
+OFFICIAL_CLEAN_RULES_SHA256 = "36d69480a9abc40ad969ec492fbedbbb69e393ccee56eae5fc63fe5358987642"
 
 MACHO_MAGICS = {
     b"\xce\xfa\xed\xfe", b"\xcf\xfa\xed\xfe",
@@ -50,7 +46,7 @@ class DebSpec:
     executable: str
     new_display_name: str
     new_bundle_name: str
-    clean_rules: bool = False
+    preserve_clean_rules: bool = False
 
 
 STORE = DebSpec(
@@ -69,7 +65,7 @@ CLEANER = DebSpec(
     executable="RootHide",
     new_display_name="清理",
     new_bundle_name="RootHide",
-    clean_rules=True,
+    preserve_clean_rules=True,
 )
 
 
@@ -201,26 +197,13 @@ def update_control(path: Path, spec: DebSpec) -> None:
     path.write_text("\n".join(rewritten) + "\n", encoding="utf-8")
 
 
-def update_clean_rules(app: Path, spec: DebSpec) -> int:
-    """Point RootHide's trace-cleaning rules at the new main app bundle ID.
-
-    The cleaner deletes leftover files by bundle identifier, so the renamed main
-    app must be listed or its preferences, caches and snapshots survive cleaning.
-    """
+def verify_clean_rules(app: Path) -> None:
+    """Keep the resource matched to RootHide's compiled VARCLEANRULESHASH."""
     rules_path = app / "varCleanRules.json"
     if not rules_path.is_file():
         raise ValueError(f"missing cleaning rules: {rules_path}")
-    text = rules_path.read_text(encoding="utf-8")
-    replaced = 0
-    for stale in STALE_MAIN_BUNDLE_IDS:
-        replaced += text.count(stale)
-        text = text.replace(stale, MAIN_BUNDLE_ID)
-    if replaced == 0:
-        raise ValueError(f"no stale main app identifiers found in {rules_path}")
-    if MAIN_BUNDLE_ID not in text:
-        raise ValueError(f"cleaning rules do not reference {MAIN_BUNDLE_ID}")
-    rules_path.write_text(text, encoding="utf-8")
-    return replaced
+    if hashlib.sha256(rules_path.read_bytes()).hexdigest() != OFFICIAL_CLEAN_RULES_SHA256:
+        raise ValueError("RootHide cleaning rules changed: the compiled startup CRC check would fail")
 
 
 def update_info_plist(path: Path, spec: DebSpec) -> None:
@@ -255,8 +238,8 @@ def repack(path: Path, spec: DebSpec, ldid: str | None, skip_sign: bool = False)
         if not (app / spec.executable).is_file():
             raise ValueError(f"missing app executable {app / spec.executable}")
         update_info_plist(app / "Info.plist", spec)
-        if spec.clean_rules:
-            update_clean_rules(app, spec)
+        if spec.preserve_clean_rules:
+            verify_clean_rules(app)
 
         if not skip_sign:
             if not ldid:
@@ -308,13 +291,8 @@ def verify(path: Path, spec: DebSpec) -> None:
         if not (app / spec.executable).is_file():
             raise ValueError(f"missing executable in {path.name}")
 
-        if spec.clean_rules:
-            rules = (app / "varCleanRules.json").read_text(encoding="utf-8")
-            if MAIN_BUNDLE_ID not in rules:
-                raise ValueError(f"cleaning rules omit {MAIN_BUNDLE_ID} in {path.name}")
-            for stale in STALE_MAIN_BUNDLE_IDS:
-                if stale in rules:
-                    raise ValueError(f"cleaning rules retain {stale} in {path.name}")
+        if spec.preserve_clean_rules:
+            verify_clean_rules(app)
 
 
 def main() -> None:
