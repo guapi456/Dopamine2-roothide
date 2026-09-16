@@ -16,3 +16,5 @@ cmake-build-*
 jbupdate.sh
 /BaseBin/roothidehooks/packages
 BaseBin/systemhook/src/roothider_test*
+
+Scripts/__pycache__/

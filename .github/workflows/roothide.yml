@@ -1,4 +1,4 @@
-name: "*** build tipa file ***"
+name: "构建 出发 TrollStore 包"
 
 on:
   # schedule:
@@ -16,14 +16,25 @@ jobs:
     runs-on: macos-14
     steps:
       - name: Checkout
-        run: |
-          set -x
-          git clone --recursive https://github.com/roothide/Dopamine2-roothide ${{ github.workspace }}
-          
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install Procursus
         uses: dhinakg/procursus-action@main
         with:
           packages: ldid findutils sed coreutils make
+
+      - name: Relabel 商店 and 清理
+        run: |
+          set -euxo pipefail
+          python3 Scripts/repack_display_names.py --ldid "$(command -v ldid)"
 
       - name: Install THEOS
         run: |
@@ -75,13 +86,18 @@ jobs:
           rm -rf $(xcrun --sdk iphoneos --show-sdk-path)/usr/include/xpc $(xcrun --sdk iphoneos --show-sdk-path)/usr/include/xpc.modulemap
           gmake -j$(sysctl -n hw.physicalcpu)
           VERSION=$(cat ./BaseBin/_external/basebin/.version)-$(git rev-parse --short HEAD)
-          mv ./Application/Dopamine.tipa  "./Application/roothide-Dopamine-${VERSION}.tipa"
+          mv ./Application/Dopamine.tipa "./Application/出发-${VERSION}.tipa"
           echo "version=${VERSION}" >> $GITHUB_ENV
 
+      - name: Verify final TrollStore payload
+        run: |
+          set -euxo pipefail
+          python3 Scripts/verify_departure_tipa.py "./Application/出发-${version}.tipa"
+
       - name: Upload Artifact
-        id: dopamine-latest-upload
+        id: departure-latest-upload
         uses: actions/upload-artifact@v4
         with:
-          name: roothide-Dopamine-${{ env.version }}.tipa
+          name: 出发-${{ env.version }}.tipa
           path: |
-            ${{ github.workspace }}/Application/roothide-Dopamine-${{ env.version }}.tipa
+            ${{ github.workspace }}/Application/出发-${{ env.version }}.tipa
